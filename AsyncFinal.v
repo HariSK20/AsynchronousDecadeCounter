@@ -18,11 +18,11 @@ endmodule
 module AsyncDecadeCounter(input clk, output reset, output [3:0] q);
     reg res;
     FlipFlop D(clk, res, q[0]);
-    FlipFlop C(q[0], res, q[1]);
-    FlipFlop B(q[1], res, q[2]);
-    FlipFlop A(q[2], res, q[3]);
-    always @ ( posedge clk ) begin
-        res <= (!q[0] &&  q[2] && q[1] && !q[3]);
+    FlipFlop C(!q[0], res, q[1]);
+    FlipFlop B(!q[1], res, q[2]);
+    FlipFlop A(!q[2], res, q[3]);
+    always @ ( posedge clk or q) begin
+        res <= (q[0] && ! q[2] && !q[1] && q[3]);
     end
     assign reset = res;
 endmodule
