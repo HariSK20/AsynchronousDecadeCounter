@@ -4,12 +4,12 @@
 
 module FlipFlop(input clk, input reset, output reg q);
     initial begin
-        q=0;
+        q=1'b0;
     end
 	always @(posedge clk or negedge reset)
 	begin
 		if (reset)
-			q <= 0;
+			q <= 1'b0;
 		else
 			q <= !q;
 	end
@@ -21,7 +21,7 @@ module AsyncDecadeCounter(input clk, output reset, output [3:0] q);
     FlipFlop C(!q[0], res, q[1]);
     FlipFlop B(!q[1], res, q[2]);
     FlipFlop A(!q[2], res, q[3]);
-    always @ ( posedge clk or q) begin
+    always @ ( posedge clk or q ) begin
         res <= (q[0] && ! q[2] && !q[1] && q[3]);
     end
     assign reset = res;
@@ -48,19 +48,19 @@ module async10();
         $display(" Asynchronous Decade counter ");
         $display(" ----------------------------");
         $display(" | Clock | reset | ABCD | Value |");
-        $display(" ----------------------------");
+        $display(" --------------------------------");
         $monitor(" |   ", clk, "   |   ", reset, "   | ", out[3], out[2], out[1], out[0], " |  ", out,"  | ");
             // reset<=1;
             // #1
             // reset <=0;
-            for (i=0; i<20; i=i+1) begin
+            for (i=0; i<30; i=i+1) begin
                 // and and0(reset, q_A, q_D);
                 // clk <= i%2;
                 clk <= ~clk;
                 // w = {out};
                 #1;
             end
-        $display(" ----------------------------");
+        $display(" --------------------------------");
         $finish;
         end
 endmodule
